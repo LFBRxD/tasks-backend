@@ -8,6 +8,12 @@ import org.junit.Test;
 public class DateUtilsTest {
 
 	@Test
+	public void garantirQueOObjetoPodeSerInstanciado() {
+		DateUtils date = new DateUtils();
+		Assert.assertNotNull(date);
+	}
+
+	@Test
 	public void deveRetornarTrueParaDatasFuturas() {
 		LocalDate date = LocalDate.of(2030, 01, 01);
 		Assert.assertTrue(DateUtils.isEqualOrFutureDate(date));

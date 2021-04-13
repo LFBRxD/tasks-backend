@@ -51,6 +51,14 @@ pipeline {
                 }
             }
         }  
+        stage ('Funcional Test') {
+            steps {
+                dir('funcional-test') {
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github_login', url: 'https://github.com/LFBRxD/tasks-funcional-tests']]])
+                    sh 'mvn test'
+                }
+            }
+        }
     }   
 }
 

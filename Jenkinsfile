@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        stage('Build-backend'){
+        stage('Build backend'){
             steps {
                 sh 'mvn clean package -DskipTests=true'
             }
@@ -11,13 +11,20 @@ pipeline {
                 sh 'mvn test'
             }
         }
-     stage ('Sonar Analysis') {
+        stage ('Sonar Analysis') {
             environment {
                 scannerHome = tool 'SONAR_SCANNER'
             }
             steps {
                 withSonarQubeEnv('SONAR_LOCAL') {
                     sh "${scannerHome}/bin/sonar-scanner -e -Dsonar.projectKey=DeployBack -Dsonar.host.url=http://localhost:9000 -Dsonar.login=5ad67fbf6ba6acb80219ee51e63f2665b6af0a50 -Dsonar.java.binaries=target -Dsonar.coverage.exclusions=**/.mvn/**,**/src/test/**,**/model/**,**Application.java"
+                }
+            }
+        }
+        stage ('Quality Gate'){
+            steps{
+                timeout(time:1, unit:'MINUTES'){
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
